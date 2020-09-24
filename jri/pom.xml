@@ -1,0 +1,26 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.elderresearch</groupId>
+		<artifactId>commons-jri-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>commons-jri</artifactId>
+	<name>ERI Commons - Java/R Integration</name>
+	
+	<properties>
+		<project.directory />
+	</properties>
+	
+	<dependencies>
+		<!-- For generating POMs when installing JRI .jars locally. Not needed transitively. -->
+		<dependency>
+		    <groupId>org.apache.maven</groupId>
+		    <artifactId>maven-model</artifactId>
+		    <version>3.6.3</version>
+		    <optional>true</optional>
+		</dependency>
+	</dependencies>
+</project>

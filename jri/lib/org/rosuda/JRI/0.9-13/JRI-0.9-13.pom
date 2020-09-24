@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <groupId>org.rosuda</groupId>
+  <artifactId>JRI</artifactId>
+  <version>0.9-13</version>
+  <name>Low-Level R to Java Interface</name>
+  <description>Low-level interface to Java VM very much like .C/.Call and friends. Allows creation of objects, calling methods and accessing fields.</description>
+  <url>http://www.rforge.net/rJava/</url>
+  <licenses>
+    <license>
+      <name>GPL-2</name>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <name>Simon Urbanek</name>
+      <email>simon.urbanek@r-project.org</email>
+      <roles>
+        <role>Author</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Simon Urbanek</name>
+      <email>simon.urbanek@r-project.org</email>
+      <roles>
+        <role>Maintainer</role>
+      </roles>
+    </developer>
+  </developers>
+  <issueManagement>
+    <url>https://github.com/s-u/rJava/issues</url>
+  </issueManagement>
+</project>

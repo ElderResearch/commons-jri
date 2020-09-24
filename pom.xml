@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.elderresearch.maven-parent</groupId>
+		<artifactId>maven-parent</artifactId>
+		<version>6.0.7</version>
+	</parent>
+
+	<groupId>com.elderresearch</groupId>
+	<artifactId>commons-jri-parent</artifactId>
+	<name>ERI Commons - Java/R Integration (Parent)</name>
+	<description>Shared JVM language extensions</description>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<inceptionYear>2020</inceptionYear>
+	
+	<properties>
+		<project.directory>commons-jri</project.directory>
+	</properties>
+	
+	<repositories>
+       <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+       </repository>
+    </repositories>
+    
+    <modules>
+    	<module>jri</module>
+    </modules>
+	
+	<dependencies>
+		
+	</dependencies>
+</project>
