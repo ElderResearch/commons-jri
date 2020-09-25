@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableMap;
 
 import lombok.val;
 
-public class UpdateJriJars {
+public class InstallJri {
 	private static final String INSTALL_CMD = "call mvn install:install-file -Dfile=\"${jar}\" -DpomFile=\"${pom}\" -DlocalRepositoryPath=\"lib\"";
 	
 	private static Model convertDescriptionToPOM(Path rJavaHome) throws IOException {
