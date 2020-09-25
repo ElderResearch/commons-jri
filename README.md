@@ -1,7 +1,7 @@
 ERI Commons - Java/R Integration
 ------------------------------------------
 
-![Build](https://github.com/ElderResearch/commons-jri/workflows/Java%20CI%20with%20Maven/badge.svg)
+![Build](https://github.com/ElderResearch/commons-jri/workflows/Java%20CI%20with%20Maven/badge.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A library to make R/Java interaction (via rJava/JRI) simpler and more robust.
 
@@ -72,7 +72,7 @@ R_HOME=/usr/lib/R/
 
 * Create your R package in a folder. According to [our project template](https://gitlab.com/ElderResearch/devops/templates/project), we recommend putting it in `src/package.name`
 * Create a class with a main entry point that configures a `InstallDependencies` instance with the path to your package and invokes `install()`
-* Specify the full class name to the property `r.package.installer`. This will automatically be run during the `prepare-pacakge` phase and will install the dependencies of your package to a folder (`/lib` by default) non-interactively
+* Specify the full class name to the property `r.package.installer`. This will automatically be run during the `prepare-pacakge` phase and will install the dependencies of your package to a folder (`/lib` by default) non-interactively. TODO: Make a proper Maven plugin
 * Add the folder with dependencies to your `.gitignore`
 * When packaging, be sure to include your R package and its dependencies in your assembly descriptor
 * Depend on the **shaded** artifact in your `pom.xml`:
