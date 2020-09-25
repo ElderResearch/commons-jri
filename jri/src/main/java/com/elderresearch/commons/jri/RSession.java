@@ -57,7 +57,7 @@ public class RSession {
 				re = new JRIEngine(args, callback, interactive);
 				re.parseAndEval(String.format(".libPaths('%s')", libraryPath));
 				for (val p : packages) {
-					log.info("Loading package %s...", p);
+					log.info("Loading package {}...", p);
 					re.parseAndEval(String.format("library(%s)", p));
 				}
 				log.info("R engine ready");
