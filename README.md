@@ -70,11 +70,11 @@ R_HOME=/usr/lib/R/
 </parent>
 ```
 
-* Create your R package in a folder. According to [our project template](https://gitlab.com/ElderResearch/devops/templates/project), we recommend putting it in `src/package.name`.
+* Create your R package in a folder. According to [our project template](https://gitlab.com/ElderResearch/devops/templates/project), we recommend putting it in `src/package.name`
 * Create a class with a main entry point that configures a `InstallDependencies` instance with the path to your package and invokes `install()`
-* Specify the full class name to the property `r.package.installer`. This will automatically be run during the `prepare-pacakge` phase and will install the dependencies of your package to a folder (`/lib` by default) non-interactively.
-* Add the folder with dependencies to your `.gitignore`.
-* When packaging, be sure to include your R package and its dependencies in your assembly descriptor.
+* Specify the full class name to the property `r.package.installer`. This will automatically be run during the `prepare-pacakge` phase and will install the dependencies of your package to a folder (`/lib` by default) non-interactively
+* Add the folder with dependencies to your `.gitignore`
+* When packaging, be sure to include your R package and its dependencies in your assembly descriptor
 * Depend on the **shaded** artifact in your `pom.xml`:
 
 ```xml
