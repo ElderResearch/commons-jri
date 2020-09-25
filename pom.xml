@@ -11,14 +11,14 @@
 	<artifactId>commons-jri-parent</artifactId>
 	<name>ERI Commons - Java/R Integration (Parent)</name>
 	<description>Shared JVM language extensions</description>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<packaging>pom</packaging>
 	<inceptionYear>2020</inceptionYear>
 	
 	<properties>
 		<project.directory>commons-jri</project.directory>
 		<r.package.installer>your.installer.class.Here</r.package.installer>
-		<r.package.skip>false</r.package.skip>
+		<r.package.skip>true</r.package.skip>
 	</properties>
 	
 	<repositories>
@@ -37,6 +37,7 @@
 			<plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
                 <executions>
                 	<!-- Install the R package using InstallDependencies -->
                 	<execution>
