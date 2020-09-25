@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableMap;
 
 import lombok.val;
 
-public class UpdateJriJars {
+public class InstallJri {
 	private static final String INSTALL_CMD = "call mvn install:install-file -Dfile=\"${jar}\" -DpomFile=\"${pom}\" -DlocalRepositoryPath=\"lib\"";
 	
 	private static Model convertDescriptionToPOM(Path rJavaHome) throws IOException {
@@ -51,6 +51,18 @@ public class UpdateJriJars {
 		return model;
 	}
 	
+	private static Developer toDeveloper(Properties p, String role) {
+		val ret = new Developer();
+		
+		val s = p.getProperty(role);
+		int i = s.indexOf('<');
+
+		ret.setName(s.substring(0, i).strip());
+		ret.setEmail(StringUtils.chop(s.substring(i + 1)));
+		ret.setRoles(Arrays.asList(role));
+		return ret;
+	}
+	
 	private static void writePom(Model m, Path p) throws IOException {
 		new MavenXpp3Writer().write(Files.newOutputStream(p), m);
 	}
@@ -75,17 +87,5 @@ public class UpdateJriJars {
 		val batPath = Paths.get("target", "install.bat");
 		Files.write(batPath, cmds);
 		new ProcessBuilder(batPath.toString()).inheritIO().start();
-	}
-	
-	private static Developer toDeveloper(Properties p, String role) {
-		val ret = new Developer();
-		
-		val s = p.getProperty(role);
-		int i = s.indexOf('<');
-
-		ret.setName(s.substring(0, i).strip());
-		ret.setEmail(StringUtils.chop(s.substring(i + 1)));
-		ret.setRoles(Arrays.asList(role));
-		return ret;
 	}
 }
