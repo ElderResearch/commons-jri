@@ -13,6 +13,7 @@
 	<properties>
 		<project.directory />
 		<rJava.version>0.9-13</rJava.version>
+		<Rserve.version>1.7-3.1</Rserve.version>
 	</properties>
 	
 	<repositories>
@@ -47,6 +48,12 @@
             <groupId>org.rosuda</groupId>
             <artifactId>JRIEngine</artifactId>
             <version>${rJava.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.rosuda</groupId>
+            <artifactId>Rserve</artifactId>
+            <version>${Rserve.version}</version>
             <optional>true</optional>
         </dependency>
 	
