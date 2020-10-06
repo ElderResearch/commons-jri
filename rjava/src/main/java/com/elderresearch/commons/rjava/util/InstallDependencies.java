@@ -1,4 +1,4 @@
-package com.elderresearch.commons.jri.util;
+package com.elderresearch.commons.rjava.util;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,7 +10,8 @@ import org.apache.commons.lang3.SystemUtils;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
 
-import com.elderresearch.commons.jri.RSession;
+import com.elderresearch.commons.jri.util.RPath;
+import com.elderresearch.commons.rjava.RSession;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

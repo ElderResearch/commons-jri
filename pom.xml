@@ -18,41 +18,75 @@
 	<properties>
 		<project.directory>commons-jri</project.directory>
 		<r.package.installer>your.installer.class.Here</r.package.installer>
-		<r.package.skip>true</r.package.skip>
+		<maven.model.version>3.6.3</maven.model.version>
 	</properties>
-	
+
 	<repositories>
-       <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-       </repository>
-    </repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+		<repository>
+			<id>local-lib</id>
+			<url>file://${basedir}/lib</url>
+		</repository>
+	</repositories>
     
     <modules>
-    	<module>jri</module>
+		<module>jri</module>
+    	<module>rjava</module>
+		<module>rserve</module>
     </modules>
+    
+    <dependencies>
+    	<dependency>
+    		<groupId>org.apache.commons</groupId>
+    		<artifactId>commons-lang3</artifactId>
+    		<version>3.11</version>
+		</dependency>
+    
+		<!-- For generating POMs when installing JRI .jars locally -->
+		<dependency>
+		    <groupId>org.apache.maven</groupId>
+		    <artifactId>maven-model</artifactId>
+		    <version>${maven.model.version}</version>
+		    <scope>test</scope>
+		</dependency>
+    </dependencies>
 
 	<build>
-		<plugins>
-			<plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
-                <executions>
-                	<!-- Install the R package using InstallDependencies -->
-                	<execution>
-                		<id>install-r-packages</id>
-                		<phase>prepare-package</phase>
-                		<goals><goal>java</goal></goals>
-                		<configuration>
-							<addResourcesToClasspath>true</addResourcesToClasspath>
-				            <includeProjectDependencies>true</includeProjectDependencies>
-				            <mainClass>${r.package.installer}</mainClass>
-				            <skip>${r.package.skip}</skip>
-                		</configuration>
-                	</execution>
-                </executions>
-            </plugin>
-		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!-- Shade the JRI jars into this artifact since downstream users won't have access to our local /lib repo -->
+				<plugin>
+					<artifactId>maven-shade-plugin</artifactId>
+					<configuration>
+						<artifactSet>
+							<includes>
+								<include>org.rosuda:*</include>
+							</includes>
+						</artifactSet>
+					</configuration>
+				</plugin>
+				<!-- Install the R package using InstallDependencies -->
+				<plugin>
+	                <groupId>org.codehaus.mojo</groupId>
+	                <artifactId>exec-maven-plugin</artifactId>
+	                <version>1.6.0</version>
+	                <executions>
+	                	<execution>
+	                		<id>install-r-packages</id>
+	                		<phase>prepare-package</phase>
+	                		<goals><goal>java</goal></goals>
+	                		<configuration>
+								<addResourcesToClasspath>true</addResourcesToClasspath>
+					            <includeProjectDependencies>true</includeProjectDependencies>
+					            <mainClass>${r.package.installer}</mainClass>
+	                		</configuration>
+	                	</execution>
+	                </executions>
+	            </plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 </project>

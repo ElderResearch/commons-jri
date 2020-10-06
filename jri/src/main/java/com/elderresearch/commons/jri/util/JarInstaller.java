@@ -20,8 +20,8 @@ import com.google.common.collect.ImmutableMap;
 
 import lombok.val;
 
-class Installer {
-	static final String INSTALL_CMD = "call mvn install:install-file -Dfile=\"${jar}\" -DpomFile=\"${pom}\" -DlocalRepositoryPath=\"lib\"";
+class JarInstaller {
+	private static final String MVN_INSTALL_CMD = "call mvn install:install-file -Dfile=\"${jar}\" -DpomFile=\"${pom}\" -DlocalRepositoryPath=\"lib\"";
 	
 	static Model convertDescriptionToPOM(Path rJavaHome) throws IOException {
 		// Not perfect, but no readily available Debian Control File (DCF) parser for Java
@@ -67,7 +67,7 @@ class Installer {
 		new MavenXpp3Writer().write(Files.newOutputStream(p), m);
 	}
 	
-	static void install(String rPackage, String jarFolder, String... jars) throws IOException {
+	public static void install(String rPackage, String jarFolder, String... jars) throws IOException {
 		val pkgHome = Paths.get(System.getenv("R_HOME"), "library", rPackage);
 		val model = convertDescriptionToPOM(pkgHome);
 		
@@ -78,7 +78,7 @@ class Installer {
 			model.setArtifactId(artifact);
 			writePom(model, pomPath);
 			
-			cmds.add(StrSubstitutor.replace(INSTALL_CMD, ImmutableMap.of(
+			cmds.add(StrSubstitutor.replace(MVN_INSTALL_CMD, ImmutableMap.of(
 				"jar", pkgHome.resolve(jarFolder).resolve(artifact + ".jar").toString(),
 				"pom", pomPath.toString()
 			)));

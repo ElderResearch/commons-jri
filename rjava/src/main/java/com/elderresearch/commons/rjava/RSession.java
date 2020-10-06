@@ -1,4 +1,4 @@
-package com.elderresearch.commons.jri;
+package com.elderresearch.commons.rjava;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.rosuda.JRI.RMainLoopCallbacks;
@@ -7,8 +7,8 @@ import org.rosuda.REngine.REngine;
 import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.JRI.JRIEngine;
 
-import com.elderresearch.commons.jri.util.InstallDependencies;
 import com.elderresearch.commons.jri.util.RPath;
+import com.elderresearch.commons.rjava.util.InstallDependencies;
 
 import lombok.Getter;
 import lombok.Setter;

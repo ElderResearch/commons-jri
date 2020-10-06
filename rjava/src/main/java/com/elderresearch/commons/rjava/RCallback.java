@@ -1,4 +1,4 @@
-package com.elderresearch.commons.jri;
+package com.elderresearch.commons.rjava;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

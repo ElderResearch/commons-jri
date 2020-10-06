@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
 
+import com.elderresearch.commons.rjava.RSession;
+
 import lombok.val;
 
 @Ignore("Until we configure CI to have R correctly installed and configured")

@@ -1,0 +1,54 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.elderresearch</groupId>
+		<artifactId>commons-jri-parent</artifactId>
+		<version>0.0.4-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>commons-rjava</artifactId>
+	<name>ERI Commons - Java/R Integration via rJava</name>
+	
+	<properties>
+		<project.directory />
+		<rJava.version>0.9-13</rJava.version>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>commons-jri</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	
+		<!-- Mark dependencies as optional so they don't get passed transitively. They are shaded and 
+		     downstream users should use the shaded artifact with them included. -->
+		<dependency>
+            <groupId>org.rosuda</groupId>
+            <artifactId>JRI</artifactId>
+            <version>${rJava.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.rosuda</groupId>
+            <artifactId>REngine</artifactId>
+            <version>${rJava.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.rosuda</groupId>
+            <artifactId>JRIEngine</artifactId>
+            <version>${rJava.version}</version>
+            <optional>true</optional>
+        </dependency>	
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-shade-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>
