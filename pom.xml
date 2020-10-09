@@ -19,6 +19,12 @@
 		<project.directory>commons-jri</project.directory>
 		<r.package.installer>your.installer.class.Here</r.package.installer>
 		<maven.model.version>3.6.3</maven.model.version>
+		
+		<!-- Mark dependencies as optional so they don't get passed transitively. They are
+		     shaded and downstream users should use the shaded artifact with them included.
+		     This is centralized as a property here for easy local development with workspace 
+		     resolution (which doesn't understand the shaded classifier). -->
+		<r.dependencies.optional>true</r.dependencies.optional>
 	</properties>
 
 	<repositories>

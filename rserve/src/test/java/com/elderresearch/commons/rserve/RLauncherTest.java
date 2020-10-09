@@ -3,13 +3,14 @@ package com.elderresearch.commons.rserve;
 import java.io.IOException;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
 
 import lombok.val;
 
-// @Ignore("Until we configure CI to have R correctly installed and configured")
+@Ignore("Until we configure CI to have R correctly installed and configured")
 public class RLauncherTest {
 	@Test
 	public void testRConnection() throws REXPMismatchException, REngineException, IOException {

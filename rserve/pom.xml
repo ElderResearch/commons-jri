@@ -22,17 +22,17 @@
 			<version>${project.version}</version>
 		</dependency>
 		
-		<!-- Mark dependencies as optional so they don't get passed transitively. They are shaded and 
-		     downstream users should use the shaded artifact with them included. -->
         <dependency>
             <groupId>org.rosuda</groupId>
             <artifactId>REngine</artifactId>
             <version>${Rserve.version}</version>
+            <optional>${r.dependencies.optional}</optional>
         </dependency>
         <dependency>
             <groupId>org.rosuda</groupId>
             <artifactId>Rserve</artifactId>
             <version>${Rserve.version}</version>
+            <optional>${r.dependencies.optional}</optional>
         </dependency>
         
 		<!-- For generating POMs when installing JRI .jars locally -->
