@@ -1,12 +1,10 @@
-package com.elderresearch.commons.jri;
+package com.elderresearch.commons.rjava;
 
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
-
-import com.elderresearch.commons.rjava.RSession;
 
 import lombok.val;
 

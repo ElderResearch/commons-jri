@@ -7,6 +7,7 @@ import org.rosuda.REngine.REngine;
 import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.JRI.JRIEngine;
 
+import com.elderresearch.commons.jri.util.RArgs;
 import com.elderresearch.commons.jri.util.RPath;
 import com.elderresearch.commons.rjava.util.InstallDependencies;
 
@@ -19,9 +20,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @Setter @Accessors(chain = true, fluent = true)
 public class RSession {
-	private static final String[] DEF_ARGS = { "--slave", "--vanilla" };
-	
-	private String[] args = DEF_ARGS;
+	private String[] args = RArgs.getDefaultArgs();
 	private String[] packages = ArrayUtils.EMPTY_STRING_ARRAY;
 	private RMainLoopCallbacks callback = RCallback.INSTANCE;
 	private boolean interactive = false;

@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableMap;
 
 import lombok.val;
 
-class JarInstaller {
+public class JarInstaller {
 	private static final String MVN_INSTALL_CMD = "call mvn install:install-file -Dfile=\"${jar}\" -DpomFile=\"${pom}\" -DlocalRepositoryPath=\"lib\"";
 	
 	static Model convertDescriptionToPOM(Path rJavaHome) throws IOException {
