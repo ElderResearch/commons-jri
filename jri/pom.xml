@@ -15,6 +15,14 @@
 		<rJava.version>0.9-13</rJava.version>
 	</properties>
 	
+	<!-- This shared module "borrows" rJava's module's REngine jar for compilation -->
+	<repositories>
+		<repository>
+			<id>local-lib</id>
+			<url>file://${basedir}/../rjava/lib</url>
+		</repository>
+	</repositories>
+	
 	<dependencies>
         <dependency>
             <groupId>org.rosuda</groupId>
