@@ -15,13 +15,6 @@
 		<Rserve.version>1.7-3.1</Rserve.version>
 	</properties>
 	
-	<repositories>
-        <repository>
-            <id>local-lib</id>
-            <url>file://${basedir}/lib</url>
-        </repository>
-    </repositories>
-	
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -35,15 +28,13 @@
             <groupId>org.rosuda</groupId>
             <artifactId>REngine</artifactId>
             <version>${Rserve.version}</version>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.rosuda</groupId>
             <artifactId>Rserve</artifactId>
             <version>${Rserve.version}</version>
-            <optional>true</optional>
         </dependency>
-	
+        
 		<!-- For generating POMs when installing JRI .jars locally -->
 		<dependency>
 		    <groupId>org.apache.maven</groupId>
