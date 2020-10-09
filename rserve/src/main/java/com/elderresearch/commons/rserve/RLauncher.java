@@ -31,7 +31,7 @@ public class RLauncher {
 	@Getter private Process process;
 	@Setter @Getter private int port = defaultPort++;
 	
-	public RLauncher launch() throws IOException {
+	public RLauncher launch() {
 		val cmd = new ArrayList<String>();
 		cmd.add(SystemUtils.IS_OS_WINDOWS? "R" : "R");
 		cmd.addAll(Arrays.asList(args));
@@ -40,10 +40,15 @@ public class RLauncher {
 		String[] rserveArgs = {"--RS-port", String.valueOf(port)};
 		cmd.add(String.format("Rserve::Rserve(FALSE, args='%s')", StringUtils.join(rserveArgs, ' ')));
 		
-		process = new ProcessBuilder()
-			.inheritIO()
-			.command(cmd.toArray(String[]::new))
-			.start();
+		try {
+			process = new ProcessBuilder()
+				.inheritIO()
+				.command(cmd.toArray(String[]::new))
+				.start();
+		} catch (IOException e) {
+			log.warn("Error starting R process", e);
+			return this;
+		}
 		
 		try {
 			if (packages.length > 0) {
@@ -54,17 +59,32 @@ public class RLauncher {
 			}
 		} catch (REngineException | REXPMismatchException e) {
 			log.warn("Error loading packages {}", packages, e);
-			e.printStackTrace();
 		}
 		
 		return this;
 	}
 	
-	public RConnection connect() throws RserveException {
-		return new RConnection("localhost", port);
+	public RConnection connect() {
+		try {
+			return new RConnection("localhost", port);
+		} catch (RserveException e) {
+			log.warn("Error connecting to R", e);
+			return null;
+		}
 	}
 	
 	public static RLauncher newLauncher(String... packages) {
 		return new RLauncher().packages(packages);
+	}
+	
+	public static boolean shutdownAndClose(RConnection c) {
+		try {
+			c.shutdown();
+			c.close();
+			return true;
+		} catch (RserveException e) {
+			log.warn("Error shutting down R", e);
+			return false;
+		}
 	}
 }
