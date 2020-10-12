@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.elderresearch</groupId>
 		<artifactId>commons-jri-parent</artifactId>
-		<version>0.0.3</version>
+		<version>0.0.4</version>
 	</parent>
 
 	<artifactId>commons-jri</artifactId>
@@ -15,63 +15,26 @@
 		<rJava.version>0.9-13</rJava.version>
 	</properties>
 	
+	<!-- This shared module "borrows" rJava's module's REngine jar for compilation -->
 	<repositories>
-        <repository>
-            <id>local-lib</id>
-            <url>file://${basedir}/lib</url>
-        </repository>
-    </repositories>
+		<repository>
+			<id>local-lib</id>
+			<url>file://${basedir}/../rjava/lib</url>
+		</repository>
+	</repositories>
 	
 	<dependencies>
-		<dependency>
-    		<groupId>org.apache.commons</groupId>
-    		<artifactId>commons-lang3</artifactId>
-    		<version>3.11</version>
-		</dependency>
-		
-		<!-- Mark dependencies as optional so they don't get passed transitively. They are shaded and 
-		     downstream users should use the shaded artifact with them included. -->
-		<dependency>
-            <groupId>org.rosuda</groupId>
-            <artifactId>JRI</artifactId>
-            <version>${rJava.version}</version>
-            <optional>true</optional>
-        </dependency>
         <dependency>
             <groupId>org.rosuda</groupId>
             <artifactId>REngine</artifactId>
             <version>${rJava.version}</version>
-            <optional>true</optional>
+			<scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.rosuda</groupId>
-            <artifactId>JRIEngine</artifactId>
-            <version>${rJava.version}</version>
-            <optional>true</optional>
-        </dependency>
-	
-		<!-- For generating POMs when installing JRI .jars locally -->
-		<dependency>
 		    <groupId>org.apache.maven</groupId>
 		    <artifactId>maven-model</artifactId>
-		    <version>3.6.3</version>
-		    <scope>test</scope>
+		    <version>${maven.model.version}</version>
+		    <scope>provided</scope>
 		</dependency>
 	</dependencies>
-	
-	<build>
-		<plugins>
-			<!-- Shade the JRI jars into this artifact since downstream users won't have access to our local /lib repo -->
-			<plugin>
-				<artifactId>maven-shade-plugin</artifactId>
-				<configuration>
-					<artifactSet>
-						<includes>
-							<include>org.rosuda:*</include>
-						</includes>
-					</artifactSet>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>

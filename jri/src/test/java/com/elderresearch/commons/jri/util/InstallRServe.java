@@ -2,8 +2,8 @@ package com.elderresearch.commons.jri.util;
 
 import java.io.IOException;
 
-public class InstallJri {
+public class InstallRServe {
 	public static void main(String[] args) throws IOException {
-		JarInstaller.install("rJava", "jri", "JRI", "JRIEngine", "REngine");
+		JarInstaller.install("Rserve", "java", "Rserve", "REngine");
 	}
 }

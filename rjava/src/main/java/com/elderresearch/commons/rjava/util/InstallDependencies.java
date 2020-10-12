@@ -1,4 +1,4 @@
-package com.elderresearch.commons.jri.util;
+package com.elderresearch.commons.rjava.util;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,7 +10,8 @@ import org.apache.commons.lang3.SystemUtils;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
 
-import com.elderresearch.commons.jri.RSession;
+import com.elderresearch.commons.jri.util.RPath;
+import com.elderresearch.commons.rjava.RSession;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -35,7 +36,6 @@ public class InstallDependencies {
 		LinkingTo
 	}
 
-	// Initialization args for the R engine. Never save the workspace and run quietly.
 	private static final String DEF_CRAN_URL = "https://cloud.r-project.org";
 	private static final PackageScope[] DEF_SCOPES = { PackageScope.Depends, PackageScope.Imports };
 	private static final PackageType DEF_TYPE;
@@ -63,7 +63,6 @@ public class InstallDependencies {
 	}
 
 	private final RPath packagePath;
-	
 	private String cranUrl = DEF_CRAN_URL;
 	private PackageScope[] scopes = DEF_SCOPES;
 	private PackageType type = DEF_TYPE;
@@ -77,7 +76,7 @@ public class InstallDependencies {
 	public void install() throws REngineException, REXPMismatchException {
 		// Create an R engine
 		val re = session.start(false);
-		// Use cloud CDN CRAN to download dependnencies
+		// Use cloud CDN CRAN to download dependencies
 		re.assign("url", cranUrl);
 		// Binaries aren't available on *Nix, having the right toolchain to compile is hard on Mac/Win
 		re.assign("type", type.name().toLowerCase());

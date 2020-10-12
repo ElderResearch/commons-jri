@@ -11,3 +11,5 @@ release.properties
 .metadata/
 .checkstyle/
 /.apt_generated_tests/
+
+maven-metadata-local.xml
