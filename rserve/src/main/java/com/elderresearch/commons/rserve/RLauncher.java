@@ -41,10 +41,7 @@ public class RLauncher {
 		cmd.add(String.format("Rserve::Rserve(FALSE, args='%s')", StringUtils.join(rserveArgs, ' ')));
 		
 		try {
-			process = new ProcessBuilder()
-				.inheritIO()
-				.command(cmd.toArray(String[]::new))
-				.start();
+			process = new ProcessBuilder(cmd).inheritIO().start();
 		} catch (IOException e) {
 			log.warn("Error starting R process", e);
 			return this;
