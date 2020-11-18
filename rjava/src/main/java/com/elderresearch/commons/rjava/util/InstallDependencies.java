@@ -59,7 +59,7 @@ public class InstallDependencies {
 		} catch (IOException e) {
 			log.warn("Error creating directories for R dependencies", e);
 		}
-		DEF_INSTALL_PATH = RPath.forPath(p);	
+		DEF_INSTALL_PATH = RPath.forPath(p);
 	}
 
 	private final RPath packagePath;
@@ -73,18 +73,26 @@ public class InstallDependencies {
 		return this;
 	}
 	
-	public void install() throws REngineException, REXPMismatchException {
+	public void install() {
 		// Create an R engine
 		val re = session.start(false);
-		// Use cloud CDN CRAN to download dependencies
-		re.assign("url", cranUrl);
-		// Binaries aren't available on *Nix, having the right toolchain to compile is hard on Mac/Win
-		re.assign("type", type.name().toLowerCase());
-		// Set the type of dependencies to install
-		re.assign("deps", ArrayUtils.toStringArray(scopes));
-		// Install the package to the specified local directory, which installs any transitive dependencies
-		re.parseAndEval(String.format("remotes::install_local('%s', dependencies=deps, lib='%s', type=type, repos=url)",
-			packagePath, session.libraryPath()));
+		try {
+			// Use cloud CDN CRAN to download dependencies
+			re.assign("url", cranUrl);
+			// Binaries aren't available on *Nix, having the right toolchain to compile is hard on Mac/Win
+			re.assign("type", type.name().toLowerCase());
+			// Set the type of dependencies to install
+			re.assign("deps", ArrayUtils.toStringArray(scopes));
+			// Install the package to the specified local directory, which installs any transitive dependencies
+			re.parseAndEval(String.format("remotes::install_local('%s', "
+				+ "upgrade='never', "
+				+ "dependencies=deps, "
+				+ "lib='%s', "
+				+ "type=type, "
+				+ "repos=url)", packagePath, session.libraryPath()));
+		} catch (REngineException | REXPMismatchException e) {
+			log.warn("Error installing {}", packagePath, e);
+		}
 		re.close();
 	}
 }
