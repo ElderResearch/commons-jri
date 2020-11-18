@@ -2,9 +2,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.elderresearch</groupId>
+		<groupId>com.elderresearch.commons-jri</groupId>
 		<artifactId>commons-jri-parent</artifactId>
-		<version>0.0.4</version>
+		<version>0.0.5</version>
 	</parent>
 
 	<artifactId>commons-rjava</artifactId>
