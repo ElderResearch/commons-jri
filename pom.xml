@@ -7,7 +7,7 @@
 		<version>6.0.7</version>
 	</parent>
 
-	<groupId>com.elderresearch</groupId>
+	<groupId>com.elderresearch.commons-jri</groupId>
 	<artifactId>commons-jri-parent</artifactId>
 	<name>ERI Commons - Java/R Integration (Parent)</name>
 	<description>Shared JVM language extensions</description>
