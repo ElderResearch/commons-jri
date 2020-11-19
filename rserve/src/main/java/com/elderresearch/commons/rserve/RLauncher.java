@@ -51,9 +51,9 @@ public class RLauncher {
 			if (packages.length > 0) {
 				val c = connect();
 				c.assign("requiredPackages", packages);
-				c.parseAndEval(String.format(".libPaths('%s')", libraryPath));
-				c.parseAndEval("lapply(requiredPackages, require, character.only = TRUE)");
-				c.close();
+				c.tryEval(".libPaths('%s')", libraryPath);
+				c.tryEval("lapply(requiredPackages, require, character.only = TRUE)");
+				c.delegate().close();
 			}
 		} catch (REngineException | REXPMismatchException e) {
 			log.warn("Error loading packages {}", packages, e);
@@ -62,9 +62,9 @@ public class RLauncher {
 		return this;
 	}
 	
-	public RConnection connect() {
+	public RConnectionWrapper connect() {
 		try {
-			return new RConnection("localhost", port);
+			return new RConnectionWrapper(new RConnection("localhost", port));
 		} catch (RserveException e) {
 			log.warn("Error connecting to R", e);
 			return null;
@@ -75,10 +75,10 @@ public class RLauncher {
 		return new RLauncher().packages(packages);
 	}
 	
-	public static boolean shutdownAndClose(RConnection c) {
+	public static boolean shutdownAndClose(RConnectionWrapper c) {
 		try {
-			c.shutdown();
-			c.close();
+			c.delegate().shutdown();
+			c.delegate().close();
 			return true;
 		} catch (RserveException e) {
 			log.warn("Error shutting down R", e);
