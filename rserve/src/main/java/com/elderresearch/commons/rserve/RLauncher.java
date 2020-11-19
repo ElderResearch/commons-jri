@@ -1,12 +1,10 @@
 package com.elderresearch.commons.rserve;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.SystemUtils;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.Rserve.RConnection;
@@ -14,6 +12,7 @@ import org.rosuda.REngine.Rserve.RserveException;
 
 import com.elderresearch.commons.jri.util.RArgs;
 import com.elderresearch.commons.jri.util.RPath;
+import com.google.common.collect.Lists;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -34,8 +33,7 @@ public class RLauncher {
 	@Setter @Getter private int port = defaultPort++;
 	
 	public RLauncher launch() {
-		val cmd = new ArrayList<String>();
-		cmd.add(SystemUtils.IS_OS_WINDOWS? "R" : "R");
+		val cmd = Lists.newArrayList("R");
 		cmd.addAll(Arrays.asList(args));
 		cmd.add("-e");
 
