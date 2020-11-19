@@ -9,7 +9,6 @@ import org.rosuda.REngine.JRI.JRIEngine;
 
 import com.elderresearch.commons.jri.util.RArgs;
 import com.elderresearch.commons.jri.util.RPath;
-import com.elderresearch.commons.rjava.util.InstallDependencies;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +25,7 @@ public class RSession {
 	private boolean interactive = false;
 	
 	@Getter
-	private RPath libraryPath = InstallDependencies.DEF_INSTALL_PATH;
+	private RPath libraryPath = RPath.getDefaultLibraryPath();
 	
 	@SuppressWarnings("hiding")
 	public RSession args(String... args) {
