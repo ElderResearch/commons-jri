@@ -13,6 +13,7 @@ import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
 
 import com.elderresearch.commons.jri.util.RArgs;
+import com.elderresearch.commons.jri.util.RPath;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,6 +27,7 @@ public class RLauncher {
 	private static volatile int defaultPort = 6311;
 	
 	@Setter private String[] args = RArgs.getDefaultArgs();
+	@Setter private RPath libraryPath = RPath.getDefaultLibraryPath();
 	@Setter private String[] packages = ArrayUtils.EMPTY_STRING_ARRAY;
 	
 	@Getter private Process process;
@@ -51,6 +53,7 @@ public class RLauncher {
 			if (packages.length > 0) {
 				val c = connect();
 				c.assign("requiredPackages", packages);
+				c.parseAndEval(String.format(".libPaths('%s')", libraryPath));
 				c.parseAndEval("lapply(requiredPackages, require, character.only = TRUE)");
 				c.close();
 			}
