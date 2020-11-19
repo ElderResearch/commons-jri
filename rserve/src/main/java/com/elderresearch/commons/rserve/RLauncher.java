@@ -1,12 +1,10 @@
 package com.elderresearch.commons.rserve;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.SystemUtils;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.Rserve.RConnection;
@@ -14,6 +12,7 @@ import org.rosuda.REngine.Rserve.RserveException;
 
 import com.elderresearch.commons.jri.util.RArgs;
 import com.elderresearch.commons.jri.util.RPath;
+import com.google.common.collect.Lists;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,9 +32,8 @@ public class RLauncher {
 	@Getter private Process process;
 	@Setter @Getter private int port = defaultPort++;
 	
-	public RLauncher launch() {
-		val cmd = new ArrayList<String>();
-		cmd.add(SystemUtils.IS_OS_WINDOWS? "R" : "R");
+	public RConnectionWrapper launch() {
+		val cmd = Lists.newArrayList("R");
 		cmd.addAll(Arrays.asList(args));
 		cmd.add("-e");
 
@@ -46,27 +44,25 @@ public class RLauncher {
 			process = new ProcessBuilder(cmd).inheritIO().start();
 		} catch (IOException e) {
 			log.warn("Error starting R process", e);
-			return this;
+			return null;
 		}
-		
+
+		val c = connect();
 		try {
-			if (packages.length > 0) {
-				val c = connect();
+			if (packages.length > 0 && c != null) {
 				c.assign("requiredPackages", packages);
-				c.parseAndEval(String.format(".libPaths('%s')", libraryPath));
-				c.parseAndEval("lapply(requiredPackages, require, character.only = TRUE)");
-				c.close();
+				c.tryEval(".libPaths('%s')", libraryPath);
+				c.tryEval("lapply(requiredPackages, require, character.only = TRUE)");
 			}
 		} catch (REngineException | REXPMismatchException e) {
 			log.warn("Error loading packages {}", packages, e);
 		}
-		
-		return this;
+		return c;
 	}
 	
-	public RConnection connect() {
+	public RConnectionWrapper connect() {
 		try {
-			return new RConnection("localhost", port);
+			return new RConnectionWrapper(new RConnection("localhost", port));
 		} catch (RserveException e) {
 			log.warn("Error connecting to R", e);
 			return null;
@@ -75,16 +71,5 @@ public class RLauncher {
 	
 	public static RLauncher newLauncher(String... packages) {
 		return new RLauncher().packages(packages);
-	}
-	
-	public static boolean shutdownAndClose(RConnection c) {
-		try {
-			c.shutdown();
-			c.close();
-			return true;
-		} catch (RserveException e) {
-			log.warn("Error shutting down R", e);
-			return false;
-		}
 	}
 }
