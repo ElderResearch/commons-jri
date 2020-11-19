@@ -32,7 +32,7 @@ public class RLauncher {
 	@Getter private Process process;
 	@Setter @Getter private int port = defaultPort++;
 	
-	public RLauncher launch() {
+	public RConnectionWrapper launch() {
 		val cmd = Lists.newArrayList("R");
 		cmd.addAll(Arrays.asList(args));
 		cmd.add("-e");
@@ -44,22 +44,20 @@ public class RLauncher {
 			process = new ProcessBuilder(cmd).inheritIO().start();
 		} catch (IOException e) {
 			log.warn("Error starting R process", e);
-			return this;
+			return null;
 		}
-		
+
+		val c = connect();
 		try {
-			if (packages.length > 0) {
-				val c = connect();
+			if (packages.length > 0 && c != null) {
 				c.assign("requiredPackages", packages);
 				c.tryEval(".libPaths('%s')", libraryPath);
 				c.tryEval("lapply(requiredPackages, require, character.only = TRUE)");
-				c.delegate().close();
 			}
 		} catch (REngineException | REXPMismatchException e) {
 			log.warn("Error loading packages {}", packages, e);
 		}
-		
-		return this;
+		return c;
 	}
 	
 	public RConnectionWrapper connect() {
@@ -73,16 +71,5 @@ public class RLauncher {
 	
 	public static RLauncher newLauncher(String... packages) {
 		return new RLauncher().packages(packages);
-	}
-	
-	public static boolean shutdownAndClose(RConnectionWrapper c) {
-		try {
-			c.delegate().shutdown();
-			c.delegate().close();
-			return true;
-		} catch (RserveException e) {
-			log.warn("Error shutting down R", e);
-			return false;
-		}
 	}
 }

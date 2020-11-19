@@ -4,6 +4,7 @@ import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.Rserve.RConnection;
+import org.rosuda.REngine.Rserve.RserveException;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -32,11 +33,16 @@ public class RConnectionWrapper {
 	public void assign(String s, byte...   arr) throws REngineException { delegate.assign(s, arr); }
 	public void assign(String s, int...    arr) throws REngineException { delegate.assign(s, arr); }
 	public void assign(String s, double... arr) throws REngineException { delegate.assign(s, arr); }
-	public void assign(String s, String... arr) throws REngineException {
-		if (arr.length == 1) {
-			delegate.assign(s, arr[0]);
-		} else {
-			delegate.assign(s, arr);
+	public void assign(String s, String... arr) throws REngineException { delegate.assign(s, arr); }
+	
+	public boolean shutdown() {
+		try {
+			delegate.shutdown();
+			delegate.close();
+			return true;
+		} catch (RserveException e) {
+			log.warn("Error shutting down R", e);
+			return false;
 		}
 	}
 }
