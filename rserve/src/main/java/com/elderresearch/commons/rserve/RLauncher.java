@@ -1,6 +1,7 @@
 package com.elderresearch.commons.rserve;
 
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.Arrays;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -23,14 +24,12 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @Accessors(chain = true, fluent = true)
 public class RLauncher {
-	private static volatile int defaultPort = 6311;
-	
 	@Setter private String[] args = RArgs.getDefaultArgs();
 	@Setter private RPath libraryPath = RPath.getDefaultLibraryPath();
 	@Setter private String[] packages = ArrayUtils.EMPTY_STRING_ARRAY;
 	
 	@Getter private Process process;
-	@Setter @Getter private int port = defaultPort++;
+	@Setter @Getter private int port = findFreePort();
 	
 	public RConnectionWrapper launch() {
 		val cmd = Lists.newArrayList("R");
@@ -71,5 +70,13 @@ public class RLauncher {
 	
 	public static RLauncher newLauncher(String... packages) {
 		return new RLauncher().packages(packages);
+	}
+	
+	private static int findFreePort() {
+		try (val s = new ServerSocket(0)) {
+			return s.getLocalPort();
+        } catch (IOException ex) {
+        	throw new IllegalStateException("Could not find a free port for Rserve", ex);
+		}
 	}
 }
