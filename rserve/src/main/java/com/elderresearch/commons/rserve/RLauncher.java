@@ -24,12 +24,15 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @Accessors(chain = true, fluent = true)
 public class RLauncher {
+	public static final String LOCALHOST = "localhost", LOCALHOST_DOCKER = "host.docker.internal";
+	
 	@Setter private String[] args = RArgs.getDefaultArgs();
 	@Setter private RPath libraryPath = RPath.getDefaultLibraryPath();
 	@Setter private String[] packages = ArrayUtils.EMPTY_STRING_ARRAY;
 	
 	@Getter private Process process;
 	@Setter @Getter private int port = findFreePort();
+	@Setter @Getter private String host = LOCALHOST;
 	
 	public RConnectionWrapper launch() {
 		val cmd = Lists.newArrayList("R");
@@ -61,7 +64,7 @@ public class RLauncher {
 	
 	public RConnectionWrapper connect() {
 		try {
-			return new RConnectionWrapper(new RConnection("localhost", port));
+			return new RConnectionWrapper(new RConnection(host, port));
 		} catch (RserveException e) {
 			log.warn("Error connecting to R", e);
 			return null;
