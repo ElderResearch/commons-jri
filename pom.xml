@@ -11,7 +11,7 @@
 	<artifactId>commons-jri-parent</artifactId>
 	<name>ERI Commons - Java/R Integration (Parent)</name>
 	<description>Shared JVM language extensions</description>
-	<version>0.0.9-SNAPSHOT</version>
+	<version>0.0.9</version>
 	<packaging>pom</packaging>
 	<inceptionYear>2020</inceptionYear>
 	
