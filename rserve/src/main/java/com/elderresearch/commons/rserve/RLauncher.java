@@ -2,7 +2,6 @@ package com.elderresearch.commons.rserve;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.Arrays;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -35,12 +34,14 @@ public class RLauncher {
 	@Setter @Getter private String host = LOCALHOST;
 	
 	public RConnectionWrapper launch() {
+		// Add the R args for the R session invoking R serve
 		val cmd = Lists.newArrayList("R");
-		cmd.addAll(Arrays.asList(args));
+		for (val arg : args) { cmd.add(arg); }
+		
+		// Add the args again for Rserve to pass to its session
 		cmd.add("-e");
-
-		String[] rserveArgs = {"--RS-port", String.valueOf(port)};
-		cmd.add(String.format("Rserve::Rserve(FALSE, args='%s')", StringUtils.join(rserveArgs, ' ')));
+		String[] allArgs = ArrayUtils.addAll(args, "--RS-port", String.valueOf(port));
+		cmd.add(String.format("Rserve::Rserve(FALSE, args='%s')", StringUtils.join(allArgs, ' ')));
 		
 		try {
 			process = new ProcessBuilder(cmd).inheritIO().start();
