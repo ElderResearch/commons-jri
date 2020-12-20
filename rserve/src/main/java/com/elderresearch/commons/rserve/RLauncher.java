@@ -26,24 +26,28 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @Accessors(chain = true, fluent = true)
 public class RLauncher {
-	public static final String LOCALHOST = "localhost", LOCALHOST_DOCKER = "host.docker.internal";
-	
 	@Setter private String[] args = RArgs.getDefaultArgs();
 	@Setter private RPath libraryPath = RPath.getDefaultLibraryPath();
 	@Setter private String[] packages = ArrayUtils.EMPTY_STRING_ARRAY;
 	
 	@Getter private Process process;
 	@Setter @Getter private int port = findFreePort();
-	@Setter @Getter private String host = LOCALHOST;
+	@Setter @Getter private String host = "localhost";
 
+	private static BiFunction<String[], Integer, List<String>> batch(String rServeName) {
+		return (a, p) -> {
+			val cmd = Lists.newArrayList("R", "CMD", rServeName, "--RS-port", String.valueOf(p));
+			for (val arg : a) { cmd.add(arg); }
+			return cmd;
+		};
+	}
+	
 	@AllArgsConstructor
 	public enum LaunchType {
 		/** Uses {@code R CMD Rserve ...}, only available on Unix. */
-		BATCH((a, p) -> {
-			val cmd = Lists.newArrayList("R", "CMD", "Rserve", "--RS-port", String.valueOf(p));
-			for (val arg : a) { cmd.add(arg); }
-			return cmd;
-		}),
+		BATCH(batch("Rserve")),
+		/** Uses {@code R CMD Rserve.dbg ...} debug/non-daemon mode, only available on Unix. */
+		DEBUG(batch("Rserve.dbg")),
 		/** Uses {@code R -e Rserve::Rserve(...)}, available on all platforms. */
 		FROM_R((a, p) -> {
 			// Add the R args for the R session invoking R serve
