@@ -27,6 +27,13 @@ public class RLauncherTest {
 	}
 	
 	@Test
+	public void testRConnectionDebug() throws REXPMismatchException, REngineException {
+		val c = RLauncher.newLauncher().launch(LaunchType.DEBUG);
+		Assert.assertEquals(4, c.tryEval("2 + 2").asInteger());
+		Assert.assertTrue(c.shutdown());
+	}
+	
+	@Test
 	public void testMultipleConnection() throws REXPMismatchException, REngineException {
 		val c1 = RLauncher.newLauncher().launch();
 		val c2 = RLauncher.newLauncher().launch();
