@@ -2,6 +2,8 @@ package com.elderresearch.commons.rserve;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.List;
+import java.util.function.BiFunction;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +16,7 @@ import com.elderresearch.commons.jri.util.RArgs;
 import com.elderresearch.commons.jri.util.RPath;
 import com.google.common.collect.Lists;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
@@ -32,19 +35,38 @@ public class RLauncher {
 	@Getter private Process process;
 	@Setter @Getter private int port = findFreePort();
 	@Setter @Getter private String host = LOCALHOST;
+
+	@AllArgsConstructor
+	public enum LaunchType {
+		/** Uses {@code R CMD Rserve ...}, only available on Unix. */
+		BATCH((a, p) -> {
+			val cmd = Lists.newArrayList("R", "CMD", "Rserve", "--RS-port", String.valueOf(p));
+			for (val arg : a) { cmd.add(arg); }
+			return cmd;
+		}),
+		/** Uses {@code R -e Rserve::Rserve(...)}, available on all platforms. */
+		FROM_R((a, p) -> {
+			// Add the R args for the R session invoking R serve
+			val cmd = Lists.newArrayList("R");
+			for (val arg : a) { cmd.add(arg); }
+			
+			// Add the args again for Rserve to pass to its session
+			cmd.add("-e");
+			String[] allArgs = ArrayUtils.addAll(a, "--RS-port", String.valueOf(p));
+			cmd.add(String.format("Rserve::Rserve(FALSE, args='%s')", StringUtils.join(allArgs, ' ')));
+			return cmd;
+		});
+		
+		private BiFunction<String[], Integer, List<String>> argsToCmd;
+	}
 	
 	public RConnectionWrapper launch() {
-		// Add the R args for the R session invoking R serve
-		val cmd = Lists.newArrayList("R");
-		for (val arg : args) { cmd.add(arg); }
-		
-		// Add the args again for Rserve to pass to its session
-		cmd.add("-e");
-		String[] allArgs = ArrayUtils.addAll(args, "--RS-port", String.valueOf(port));
-		cmd.add(String.format("Rserve::Rserve(FALSE, args='%s')", StringUtils.join(allArgs, ' ')));
-		
+		return launch(LaunchType.FROM_R);
+	}
+	
+	public RConnectionWrapper launch(LaunchType type) {
 		try {
-			process = new ProcessBuilder(cmd).inheritIO().start();
+			process = new ProcessBuilder(type.argsToCmd.apply(args, port)).inheritIO().start();
 		} catch (IOException e) {
 			log.warn("Error starting R process", e);
 			return null;

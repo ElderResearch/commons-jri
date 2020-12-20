@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
 
+import com.elderresearch.commons.rserve.RLauncher.LaunchType;
+
 import lombok.val;
 
 @Ignore("Until we configure CI to have R correctly installed and configured")
@@ -13,6 +15,13 @@ public class RLauncherTest {
 	@Test
 	public void testRConnection() throws REXPMismatchException, REngineException {
 		val c = RLauncher.newLauncher().launch();
+		Assert.assertEquals(4, c.tryEval("2 + 2").asInteger());
+		Assert.assertTrue(c.shutdown());
+	}
+	
+	@Test
+	public void testRConnectionBatch() throws REXPMismatchException, REngineException {
+		val c = RLauncher.newLauncher().launch(LaunchType.BATCH);
 		Assert.assertEquals(4, c.tryEval("2 + 2").asInteger());
 		Assert.assertTrue(c.shutdown());
 	}
