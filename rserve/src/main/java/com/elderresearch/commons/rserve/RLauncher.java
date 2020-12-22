@@ -2,8 +2,11 @@ package com.elderresearch.commons.rserve;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +36,12 @@ public class RLauncher {
 	@Getter private Process process;
 	@Setter @Getter private int port = findFreePort();
 	@Setter @Getter private String host = "localhost";
+	
+	/**
+	 * Determines whether or not to continue trying to connect to R. The first argument is the number of connection
+	 * attempts and the second is the time since the first connection attempt.
+	 */
+	@Setter private BiPredicate<Integer, Duration> retryPolicy = (nAttempts, elapsedTime) -> nAttempts < 5;
 
 	private static BiFunction<String[], Integer, List<String>> batch(String rServeName) {
 		return (a, p) -> {
@@ -64,6 +73,11 @@ public class RLauncher {
 		private BiFunction<String[], Integer, List<String>> argsToCmd;
 	}
 	
+	public RLauncher enableRemoteAccess() {
+		this.args = ArrayUtils.add(args, "--RS-enable-remote");
+		return this;
+	}
+	
 	public RConnectionWrapper launch() {
 		return launch(LaunchType.FROM_R);
 	}
@@ -76,9 +90,31 @@ public class RLauncher {
 			return null;
 		}
 
-		val c = connect();
+		val start = Instant.now();
+		int i = 0;
+		RConnectionWrapper c = null;
+		RserveException lastException = null;
+		do {
+			try {
+				c = new RConnectionWrapper(new RConnection(host, port));
+			} catch (RserveException ex) {
+				lastException = ex;
+				log.debug("Could not connect to R ({}). Trying again...", ex.getMessage());
+				try {
+					Thread.sleep(300L);
+				} catch (InterruptedException ie) {
+					// Ignore interruption
+				}
+			}
+		} while (c == null && retryPolicy.test(++i, Duration.between(start, Instant.now())));
+		
+		if (c == null) {
+			log.warn("Failed to connect to R", lastException);
+			return null;
+		}
+		
 		try {
-			if (packages.length > 0 && c != null) {
+			if (packages.length > 0) {
 				c.assign("requiredPackages", packages);
 				c.tryEval(".libPaths('%s')", libraryPath);
 				c.tryEval("lapply(requiredPackages, require, character.only = TRUE)");
