@@ -3,7 +3,7 @@ ERI Commons - Java/R Integration
 
 ![Build](https://github.com/ElderResearch/commons-jri/workflows/Java%20CI%20with%20Maven/badge.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A library to make R/Java interaction (via rJava/JRI) simpler and more robust.
+A library to make R/Java interaction (via rJava or Rser) simpler and more robust.
 
 ## Maven
 
@@ -19,19 +19,29 @@ You can install this library from [Jipack.io](https://jitpack.io). Add the follo
  ```
 
 And then the following dependency:
-
 ```xml
 <dependency>
 	<groupId>com.elderresearch.commons-jri</groupId>
-	<artifactId>commons-jri</artifactId>
-	<version>0.0.1</version>
+	<artifactId>commons-rjava</artifactId>
+	<version>0.2.0</version>
 </dependency>
 ```
+or 
+```xml
+<dependency>
+	<groupId>com.elderresearch.commons-jri</groupId>
+	<artifactId>commons-rserve</artifactId>
+	<version>0.2.0</version>
+</dependency>
+```
+depending on your use case.
 
 ## Overview
 
 This library helps with several aspects of using R from Java:
 * Shading (packaging) the JRI .jars (which are not hosted officially on Maven central)
+* Generalizing across rJava and Rserve
+* Providing a fluent API for launching Rserve sessions, automatically finding a free port
 * Implements `RMainLoopCallbacks` with intelligent defaults, like sending R console output to Log4j
 * Building `data.frame` REXPs using a more flexible API
 * Providing a script to install all of a package's dependencies in a non-interactive way and to a folder local to your project. This is helpful for preparing self-contained Docker images with all of your R package's dependencies pre-installed.
@@ -66,7 +76,7 @@ R_HOME=/usr/lib/R/
 <parent>
 	<groupId>com.elderresearch.commons-jri</groupId>
 	<artifactId>commons-jri-parent</artifactId>
-	<version>0.0.1</version>
+	<version>0.2.0</version>
 </parent>
 ```
 
