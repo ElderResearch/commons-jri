@@ -64,6 +64,11 @@ public class RLauncher {
 		private BiFunction<String[], Integer, List<String>> argsToCmd;
 	}
 	
+	public RLauncher enableRemoteAccess() {
+		this.args = ArrayUtils.add(args, "--RS-enable-remote");
+		return this;
+	}
+	
 	public RConnectionWrapper launch() {
 		return launch(LaunchType.FROM_R);
 	}
