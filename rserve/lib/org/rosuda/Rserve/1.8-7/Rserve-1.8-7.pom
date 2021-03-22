@@ -2,8 +2,8 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <groupId>org.rosuda</groupId>
-  <artifactId>REngine</artifactId>
-  <version>1.7-3.1</version>
+  <artifactId>Rserve</artifactId>
+  <version>1.8-7</version>
   <name>Binary R server</name>
   <description>Rserve acts as a socket server (TCP/IP or local sockets) </description>
   <url>http://www.rforge.net/Rserve/</url>
