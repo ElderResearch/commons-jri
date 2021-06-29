@@ -32,11 +32,12 @@ public class RLauncher {
 	@Setter private String[] args = RArgs.getDefaultArgs();
 	@Setter private RPath libraryPath = RPath.getDefaultLibraryPath();
 	@Setter private String[] packages = ArrayUtils.EMPTY_STRING_ARRAY;
-	
-	@Getter private Process process;
+    @Setter private Long launchDelay = 5000L;
+
+    @Getter private Process process;
 	@Setter @Getter private int port = findFreePort();
 	@Setter @Getter private String host = "localhost";
-	
+
 	/**
 	 * Determines whether or not to continue trying to connect to R. The first argument is the number of connection
 	 * attempts and the second is the time since the first connection attempt.
@@ -101,7 +102,7 @@ public class RLauncher {
 				lastException = ex;
 				log.debug("Could not connect to R ({}). Trying again...", ex.getMessage());
 				try {
-					Thread.sleep(300L);
+					Thread.sleep(launchDelay);
 				} catch (InterruptedException ie) {
 					// Ignore interruption
 				}
